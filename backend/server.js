@@ -12,6 +12,7 @@ config(); //process.env
 
 //Create express application
 const app = exp();
+const PORT = process.env.PORT || 4000;
 //use cors middleware
 app.use(cors({ origin: ["http://localhost:5173"], credentials: true }));
 //add body parser middleware
@@ -32,7 +33,7 @@ const connectDB = async () => {
     console.log("DB connection success");
 
     //start http server
-    app.listen(process.env.PORT, () => console.log(`server started on port ${process.env.PORT}`));
+    app.listen(PORT, () => console.log(`server started on port ${PORT}`));
   } catch (err) {
     console.log("Err in DB connection", err);
   }
