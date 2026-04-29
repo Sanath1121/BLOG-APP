@@ -14,7 +14,17 @@ config(); //process.env
 const app = exp();
 const PORT = process.env.PORT || 4000;
 //use cors middleware
-app.use(cors({ origin: ["http://localhost:5173"], credentials: true }));
+// Allow local dev and deployed frontend origins (add other domains as needed)
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://blog-app-1-jrys.onrender.com",
+      "https://blog-app-q882.onrender.com",
+    ],
+    credentials: true,
+  }),
+);
 //add body parser middleware
 app.use(exp.json());
 //add cookie parser middleware
