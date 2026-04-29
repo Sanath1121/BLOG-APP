@@ -11,11 +11,13 @@ commonRouter.post("/login", async (req, res) => {
   let userCred = req.body;
   //call authenticate service
   let { token, user } = await authenticate(userCred);
-  //save tokan as httpOnly cookie
+  // For cross-site frontend/backends (deployed on different domains),
+  // set SameSite=None and Secure=true in production so browsers send the cookie.
+  const isProd = process.env.NODE_ENV === "production";
   res.cookie("token", token, {
     httpOnly: true,
-    sameSite: "lax",
-    secure: false,
+    sameSite: isProd ? "none" : "lax",
+    secure: isProd, // secure cookies only over HTTPS in production
   });
   //send res
   res.status(200).json({ message: "login success", payload: user });
@@ -23,11 +25,12 @@ commonRouter.post("/login", async (req, res) => {
 
 //logout for User, Author and Admin
 commonRouter.get("/logout", (req, res) => {
-  // Clear the cookie named 'token'
+  // Clear cookie using the same options used when setting it
+  const isProdClear = process.env.NODE_ENV === "production";
   res.clearCookie("token", {
-    httpOnly: true, // Must match original  settings
-    secure: false, // Must match original  settings
-    sameSite: "lax", // Must match original  settings
+    httpOnly: true,
+    sameSite: isProdClear ? "none" : "lax",
+    secure: isProdClear,
   });
 
   res.status(200).json({ message: "Logged out successfully" });
