@@ -45,8 +45,11 @@ commonRouter.put("/change-password", async (req, res) => {
     return res.status(400).json({ message: "newPassword must be different from currentPassword" });
   }
 
+  // Normalize email (lowercase + trim)
+  const normalizedEmail = email.toLowerCase().trim();
+
   // Find user by email (works for USER, AUTHOR, ADMIN — all same collection)
-  const account = await UserTypeModel.findOne({ email });
+  const account = await UserTypeModel.findOne({ email: normalizedEmail });
   if (!account) {
     return res.status(404).json({ message: "Account not found" });
   }

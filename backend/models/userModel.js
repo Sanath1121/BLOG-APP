@@ -11,7 +11,9 @@ const userSchema=new Schema({
     email:{
         type:String,
         required:[true,"Email is required"],
-        unique:[true,"Email already exists"]
+        unique:[true,"Email already exists"],
+        lowercase:true,
+        trim:true
     },
     password:{
         type:String,
@@ -34,6 +36,14 @@ const userSchema=new Schema({
     strict:"throw",
     timestamps:true,
     versionKey:false
+});
+
+// Pre-save hook to normalize email (extra safety layer)
+userSchema.pre('save', function(next) {
+    if(this.email) {
+        this.email = this.email.toLowerCase().trim();
+    }
+    next();
 });
 
 export const UserTypeModel = model("user",userSchema);

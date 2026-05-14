@@ -6,8 +6,13 @@ config()
 
 //register function
 export const register = async (userObj) => {
+  //normalize email before creating document
+  const normalizedUserObj = {
+    ...userObj,
+    email: userObj.email.toLowerCase().trim()
+  };
   //Create document
-  const userDoc = new UserTypeModel(userObj);
+  const userDoc = new UserTypeModel(normalizedUserObj);
   //validate for emprty passwords
   await userDoc.validate();
   //hash and replace plain password
@@ -24,8 +29,10 @@ export const register = async (userObj) => {
 
 //authenticate function
 export const authenticate = async ({ email, password }) => {
-    //check user with email & role
-  const user = await UserTypeModel.findOne({ email });
+    //normalize email (lowercase + trim)
+  const normalizedEmail = email.toLowerCase().trim();
+  //check user with email & role
+  const user = await UserTypeModel.findOne({ email: normalizedEmail });
   if (!user) {
     const err = new Error("Invalid email");
     err.status = 401;
