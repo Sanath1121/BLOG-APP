@@ -1,5 +1,6 @@
 import { NavLink, useNavigate } from "react-router";
 import { useAuth } from "../store/authStore";
+import logo from "../assets/logo.jpeg";
 import {
   navbarClass,
   navContainerClass,
@@ -46,8 +47,9 @@ function Header() {
     <nav className={navbarClass}>
       <div className={navContainerClass}>
         {/* Logo */}
-        <NavLink to="/" className={navBrandClass}>
-          MyBlog
+        <NavLink to="/" className={`${navBrandClass} flex items-center gap-2`}>
+          <img src={logo} alt="MyBlog logo" className="h-7 w-7 rounded-full object-cover" />
+          <span>MyBlog</span>
         </NavLink>
 
         <ul className={navLinksClass}>
