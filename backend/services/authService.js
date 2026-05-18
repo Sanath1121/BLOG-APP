@@ -6,6 +6,13 @@ config()
 
 //register function
 export const register = async (userObj) => {
+  //validate required fields
+  if (!userObj.email || !userObj.password || !userObj.firstName) {
+    const err = new Error("Email, password, and firstName are required");
+    err.status = 400;
+    throw err;
+  }
+  
   //normalize email before creating document
   const normalizedUserObj = {
     ...userObj,
