@@ -43,18 +43,19 @@ const connectDB = async () => {
     console.log("[DB] Attempting to connect to:", process.env.DB_URL ? "URL provided" : "NO URL PROVIDED");
     await connect(process.env.DB_URL);
     console.log("[DB] Connection success");
+
+    //start http server
+    app.listen(PORT, () => {
+      console.log(`[SERVER] Started on port ${PORT}`);
+    });
   } catch (err) {
     console.error("[DB] Connection failed:", err.message);
     console.error("[DB] Full error:", err);
+    process.exit(1); // Exit if DB connection fails
   }
 };
 
 connectDB();
-
-// Start server regardless of DB connection status
-app.listen(PORT, () => {
-  console.log(`[SERVER] Started on port ${PORT}`);
-});
 
 //dealing with invalid path
 app.use((req, res, next) => {
