@@ -121,9 +121,10 @@ app.use((err, req, res, next) => {
   }
 
   // default server error - return error message in dev, generic in prod
+  const isDev = process.env.NODE_ENV !== "production";
   res.status(500).json({
     message: "error occurred",
-    error: err.message || "Server side error",
+    error: isDev ? err.message : "Server side error",
   });
 });
 // app.use((err, req, res, next) => {

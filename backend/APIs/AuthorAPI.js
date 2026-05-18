@@ -71,7 +71,10 @@ async function handleAuthorRegistration(req, res, next) {
       await cloudinary.uploader.destroy(cloudinaryResult.public_id);
     }
 
-    next(err); // send to your error middleware
+    return res.status(err.status || 500).json({
+      message: "error occurred",
+      error: err.message || "Server side error",
+    });
   }
 }
 
