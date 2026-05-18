@@ -18,7 +18,13 @@ authorRoute.post("/users", upload.single("profileImageUrl"), async (req, res, ne
 
     //  Step 1: upload image to cloudinary from memoryStorage (if exists)
     if (req.file) {
-      cloudinaryResult = await uploadToCloudinary(req.file.buffer);
+      try {
+        cloudinaryResult = await uploadToCloudinary(req.file.buffer);
+      } catch (cloudinaryErr) {
+        console.error("Cloudinary upload error:", cloudinaryErr.message);
+        // Continue without image if upload fails
+        cloudinaryResult = null;
+      }
     }
 
     // Step 2: call existing register()
