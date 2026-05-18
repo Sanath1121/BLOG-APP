@@ -62,6 +62,11 @@ app.use((req, res) => {
   res.status(404).json({ message: `${req.url} is invalid path` });
 });
 
+// Catch-all for unhandled rejections in async route handlers
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('[UNHANDLED REJECTION]', reason);
+});
+
 //error handling middleware
 app.use((err, req, res, next) => {
   console.log("=== ERROR MIDDLEWARE ===");

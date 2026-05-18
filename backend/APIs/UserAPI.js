@@ -9,7 +9,22 @@ import { uploadToCloudinary } from "../config/cloudinaryUpload.js";
 export const userRoute = exp.Router();
 
 //Register user
-userRoute.post("/users", upload.single("profileImageUrl"), async (req, res, next) => {
+userRoute.post("/users", (req, res, next) => {
+  upload.single("profileImageUrl")(req, res, (err) => {
+    if (err) {
+      console.error("[USER_REG] Multer error:", err.message);
+      return res.status(400).json({ 
+        message: "error occurred", 
+        error: `File upload failed: ${err.message}` 
+      });
+    }
+    
+    // Multer processing complete, proceed with registration
+    handleUserRegistration(req, res, next);
+  });
+});
+
+async function handleUserRegistration(req, res, next) {
   let cloudinaryResult;
   console.log("[USER_REG] Incoming request body:", req.body);
   console.log("[USER_REG] File received:", req.file ? "yes" : "no");
@@ -58,7 +73,7 @@ userRoute.post("/users", upload.single("profileImageUrl"), async (req, res, next
 
     next(err); // send to your error middleware
   }
-});
+}
 
 //Read all articles(protected route)
 userRoute.get("/articles", verifyToken("USER"), async (req, res) => {
