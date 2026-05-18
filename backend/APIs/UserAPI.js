@@ -13,10 +13,12 @@ userRoute.post("/users", upload.single("profileImageUrl"), async (req, res, next
   let cloudinaryResult;
   console.log("[USER_REG] Incoming request body:", req.body);
   console.log("[USER_REG] File received:", req.file ? "yes" : "no");
+  console.log("[USER_REG] Headers:", req.headers);
 
   try {
     //getb user obj
     let userObj = req.body;
+    console.log("[USER_REG] User object keys:", Object.keys(userObj));
 
     //  Step 1: upload image to cloudinary from memoryStorage (if exists)
     if (req.file) {
@@ -46,6 +48,7 @@ userRoute.post("/users", upload.single("profileImageUrl"), async (req, res, next
     });
   } catch (err) {
     console.error("[USER_REG] Error caught:", err.message);
+    console.error("[USER_REG] Error stack:", err.stack);
     console.error("[USER_REG] Full error:", err);
     
     // Step 3: rollback

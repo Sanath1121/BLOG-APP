@@ -31,6 +31,26 @@ app.use(exp.urlencoded({ extended: true }));
 //add cookie parser middleware
 app.use(cookieParser());
 
+// Error handler for multipart/form-data parsing
+app.use((err, req, res, next) => {
+  if (err.code === 'LIMIT_PART_COUNT') {
+    return res.status(400).json({ message: "error occurred", error: "Too many form fields" });
+  }
+  if (err.code === 'LIMIT_FILE_SIZE') {
+    return res.status(400).json({ message: "error occurred", error: "File too large" });
+  }
+  if (err.code === 'LIMIT_FILE_COUNT') {
+    return res.status(400).json({ message: "error occurred", error: "Too many files" });
+  }
+  if (err.code === 'LIMIT_FIELD_KEY') {
+    return res.status(400).json({ message: "error occurred", error: "Field name too long" });
+  }
+  if (err.code === 'LIMIT_FIELD_VALUE') {
+    return res.status(400).json({ message: "error occurred", error: "Field value too long" });
+  }
+  next(err);
+});
+
 //connect APIs
 app.use("/user-api", userRoute);
 app.use("/author-api", authorRoute);
