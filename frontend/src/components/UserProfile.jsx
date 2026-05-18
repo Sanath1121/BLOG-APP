@@ -29,7 +29,7 @@ function UserProfile() {
     const getArticles = async () => {
       setLoading(true);
       try {
-        const res = await axios.get("https://blog-app-q882.onrender.com/user-api/articles", { withCredentials: true });
+        const res = await axios.get("https://blog-app-1-jrys.onrender.com/user-api/articles", { withCredentials: true });
 
         setArticles(res.data.payload);
       } catch (err) {
