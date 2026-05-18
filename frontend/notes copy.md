@@ -1,59 +1,74 @@
-Create new react app:
+## Frontend Development Notes
 
-    npm create vite@latest
+This file keeps the frontend setup and implementation patterns in one place.
 
-    clear app.css, index.css
+### Project Setup
 
+1. Create the app with Vite.
+2. Clear the starter styles if needed.
+3. Install Tailwind and the Vite plugin.
+4. Add the Tailwind import to `src/index.css`.
+5. Restart the dev server after config changes.
 
-Install tailwind css:
-    npm install tailwindcss @tailwindcss/vite
+### Tailwind Setup
 
+```bash
+npm install tailwindcss @tailwindcss/vite
+```
 
-Correction step (if Tailwind classes are not applying):
-        In vite.config.js add:
+Add the plugin in `vite.config.js`:
 
-        import { defineConfig } from 'vite'
-        import react from '@vitejs/plugin-react'
-        import tailwindcss from '@tailwindcss/vite'
+```js
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
 
-        export default defineConfig({
-            plugins: [react(), tailwindcss()],
-        })
+export default defineConfig({
+  plugins: [react(), tailwindcss()],
+});
+```
 
-        Also keep this in src/index.css:
-        @import "tailwindcss";
+Add this to `src/index.css`:
 
-        Then restart dev server:
-        npm run dev
+```css
+@import "tailwindcss";
+```
 
-React-Hook:
-    Install:
-        npm install react-hook-form
+### Forms
 
-    Import:
-        import {useForm} from "react-hook-form"
-    
-    Returns:
-        Object
-        usage: const {register,handleSubmit} =useForm()
+Use `react-hook-form` for most form handling.
 
-    Register() function:
+```bash
+npm install react-hook-form
+```
 
-    
-    Component Side Effects:
+Pattern:
 
-        A component can render initially before displaying content.
-        
-        If the component is about to make an api request it should wait untill the initial rendering is completed.
+```js
+import { useForm } from "react-hook-form";
 
-        If both initial rendering and api request happen together, it leads to unexpected bugs in the application.
+const { register, handleSubmit } = useForm();
+```
 
-        No dependency array - run after every render
-            useEffect(()=>{side effect})
+### Side Effects
 
-        Empty array [] - runs once on mount
-            useEffect(()=>{side effect},[])
+- Use `useEffect(() => {})` only when a side effect should run after render.
+- Use `useEffect(() => {}, [])` for one-time work on mount.
+- Use dependency arrays when the effect should respond to specific state changes.
 
-        With dependencies - 
-            useEffect(()=>{side Effect},[dependency])
-    
+### App Conventions
+
+- Keep API calls in store or service helpers when possible.
+- Use protected routes for role-gated screens.
+- Keep form validation close to the form component.
+- Centralize reusable UI patterns in `components/`.
+
+### Current Route Map
+
+- Home, login, register, user profile, author profile, article details, edit article, unauthorized view.
+
+### Troubleshooting
+
+- If Tailwind classes do not apply, verify the plugin config and CSS import.
+- If auth requests fail, confirm the backend URL and cookie behavior.
+- If route navigation breaks after deploy, verify `react-router` version compatibility.
