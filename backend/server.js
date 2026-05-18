@@ -40,17 +40,21 @@ app.use("/common-api", commonRouter);
 //connect to db
 const connectDB = async () => {
   try {
+    console.log("[DB] Attempting to connect to:", process.env.DB_URL ? "URL provided" : "NO URL PROVIDED");
     await connect(process.env.DB_URL);
-    console.log("DB connection success");
-
-    //start http server
-    app.listen(PORT, () => console.log(`server started on port ${PORT}`));
+    console.log("[DB] Connection success");
   } catch (err) {
-    console.log("Err in DB connection", err);
+    console.error("[DB] Connection failed:", err.message);
+    console.error("[DB] Full error:", err);
   }
 };
 
 connectDB();
+
+// Start server regardless of DB connection status
+app.listen(PORT, () => {
+  console.log(`[SERVER] Started on port ${PORT}`);
+});
 
 //dealing with invalid path
 app.use((req, res, next) => {
@@ -86,7 +90,7 @@ app.use((err, req, res, next) => {
   const errCode = err.code ?? err.cause?.code ?? err.errorResponse?.code;
   const keyValue = err.keyValue ?? err.cause?.keyValue ?? err.errorResponse?.keyValue;
 
-  if (errCode === 11000) {
+  if (errCode === 11000 && keyValue) {
     const field = Object.keys(keyValue)[0];
     const value = keyValue[field];
     return res.status(409).json({
@@ -103,10 +107,19 @@ app.use((err, req, res, next) => {
     });
   }
 
-  // default server error
+  // For database connection errors
+  if (err.message && err.message.includes("connect")) {
+    return res.status(503).json({
+      message: "error occurred",
+      error: "Database connection failed. Please try again later.",
+    });
+  }
+
+  // default server error - return error message in dev, generic in prod
+  const isDev = process.env.NODE_ENV !== "production";
   res.status(500).json({
     message: "error occurred",
-    error: "Server side error",
+    error: isDev ? err.message : "Server side error",
   });
 });
 // app.use((err, req, res, next) => {
