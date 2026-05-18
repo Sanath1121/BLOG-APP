@@ -60,9 +60,12 @@ app.use((req, res, next) => {
 
 //error handling middleware
 app.use((err, req, res, next) => {
+  console.log("=== ERROR MIDDLEWARE ===");
   console.log("Error name:", err.name);
   console.log("Error code:", err.code);
+  console.log("Error message:", err.message);
   console.log("Full error:", err);
+  console.log("========================");
 
   // mongoose validation error
   if (err.name === "ValidationError") {

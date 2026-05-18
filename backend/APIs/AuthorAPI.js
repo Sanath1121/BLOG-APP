@@ -11,6 +11,8 @@ export const authorRoute = exp.Router();
 //Register author(public)
 authorRoute.post("/users", upload.single("profileImageUrl"), async (req, res, next) => {
   let cloudinaryResult;
+  console.log("[AUTHOR_REG] Incoming request body:", req.body);
+  console.log("[AUTHOR_REG] File received:", req.file ? "yes" : "no");
 
   try {
     //getb user obj
@@ -19,26 +21,33 @@ authorRoute.post("/users", upload.single("profileImageUrl"), async (req, res, ne
     //  Step 1: upload image to cloudinary from memoryStorage (if exists)
     if (req.file) {
       try {
+        console.log("[AUTHOR_REG] Uploading to Cloudinary...");
         cloudinaryResult = await uploadToCloudinary(req.file.buffer);
+        console.log("[AUTHOR_REG] Cloudinary upload success");
       } catch (cloudinaryErr) {
-        console.error("Cloudinary upload error:", cloudinaryErr.message);
+        console.error("[AUTHOR_REG] Cloudinary upload error:", cloudinaryErr.message);
         // Continue without image if upload fails
         cloudinaryResult = null;
       }
     }
 
     // Step 2: call existing register()
+    console.log("[AUTHOR_REG] Calling register function...");
     const newUserObj = await register({
       ...userObj,
       role: "AUTHOR",
       profileImageUrl: cloudinaryResult?.secure_url,
     });
+    console.log("[AUTHOR_REG] Registration successful");
 
     res.status(201).json({
       message: "user created",
       payload: newUserObj,
     });
   } catch (err) {
+    console.error("[AUTHOR_REG] Error caught:", err.message);
+    console.error("[AUTHOR_REG] Full error:", err);
+    
     // Step 3: rollback
     if (cloudinaryResult?.public_id) {
       await cloudinary.uploader.destroy(cloudinaryResult.public_id);
