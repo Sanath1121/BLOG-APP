@@ -39,11 +39,10 @@ const userSchema=new Schema({
 });
 
 // Pre-save hook to normalize email (extra safety layer)
-userSchema.pre('save', function(next) {
-    if(this.email) {
+userSchema.pre('save', function() {
+    if (this.email) {
         this.email = this.email.toLowerCase().trim();
     }
-    next();
 });
 
 export const UserTypeModel = model("user",userSchema);
