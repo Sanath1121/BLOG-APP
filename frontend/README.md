@@ -1,51 +1,64 @@
 # Blog App Frontend
 
-This is the frontend for the Blog App. It is built with React and Vite and provides the user interface for browsing, creating, editing, and managing blog articles.
+This folder contains the React frontend for Blog App. It provides the user-facing experience for browsing posts, signing in, registering, and managing author content.
 
 ## Features
 
-- User authentication pages for login and registration
-- Home feed and article detail views
-- Author profile and author articles pages
-- Create and edit article forms
-- Protected routes and basic error handling
+- Home page and article discovery
+- Login and registration screens
+- Author and user profile pages
+- Article creation and editing
+- Protected routes and form handling
 
-## Tech Stack
+## Packages Used
 
-- React 19
-- Vite
-- React Router
-- Zustand
-- Axios
-- Tailwind CSS
+- `react`
+- `react-dom`
+- `react-router`
+- `react-hook-form`
+- `axios`
+- `zustand`
+- `react-hot-toast`
+- `tailwindcss`
+- `@tailwindcss/vite`
+- `vite`
+- `eslint`
+- `@eslint/js`
+- `@vitejs/plugin-react`
+- `eslint-plugin-react-hooks`
+- `eslint-plugin-react-refresh`
+- `globals`
+- `@types/react`
+- `@types/react-dom`
 
-## Getting Started
-
-Install dependencies:
+## Commands
 
 ```bash
 npm install
 ```
 
-Run the development server:
-
 ```bash
 npm run dev
 ```
-
-Build for production:
 
 ```bash
 npm run build
 ```
 
-Preview the production build:
-
 ```bash
 npm run preview
 ```
 
+```bash
+npm run lint
+```
+
+## Deployment
+
+- Platform: Render
+- Live URL: https://blog-app-1-jrys.onrender.com
+
 ## Notes
 
-- Make sure the backend server is running before using features that depend on the API.
-- Check the frontend source files in `src/` for the current app structure and components.
+- The frontend expects the backend API to be available before authentication and article actions will work.
+- Source files are located in `src/`.

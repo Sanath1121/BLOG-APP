@@ -1,49 +1,56 @@
 # Blog App Backend
 
-This is the backend for the Blog App. It is built with Node.js, Express, and MongoDB and provides the API used by the frontend.
+This folder contains the Express API for Blog App. It handles authentication, user and author routes, article operations, and file uploads.
 
 ## Features
 
-- User authentication and protected routes
-- Blog article CRUD operations
-- Author-specific APIs
-- File uploads with Cloudinary and Multer
-- MongoDB data models for users and articles
+- User registration and login
+- Protected API routes
+- Article management endpoints
+- Cloudinary image upload support
+- MongoDB persistence with Mongoose
 
-## Tech Stack
+## Packages Used
 
-- Node.js
-- Express
-- MongoDB and Mongoose
-- JSON Web Token authentication
-- Cloudinary
-- Multer
+- `express`
+- `mongoose`
+- `bcryptjs`
+- `jsonwebtoken`
+- `cookie-parser`
+- `cors`
+- `dotenv`
+- `multer`
+- `cloudinary`
+- `nodemon`
 
-## Getting Started
-
-Install dependencies:
+## Commands
 
 ```bash
 npm install
 ```
 
-Run the development server:
-
 ```bash
 npm run dev
 ```
-
-Start the server in production mode:
 
 ```bash
 npm start
 ```
 
+## Deployment
+
+- Platform: Render
+- Live URL: https://blog-app-q882.onrender.com
+
 ## Environment Variables
 
-Create a `.env` file in this folder and configure the required values for your database, authentication, and Cloudinary setup.
+Create a `.env` file in this folder with values for:
+
+- `DB_URL`
+- `JWT_SECRET`
+- Cloudinary credentials
 
 ## Notes
 
-- Make sure MongoDB is running before starting the backend.
-- The backend API is intended to work together with the frontend in the `frontend/` folder.
+- The backend should be running before using the frontend.
+- API routes are mounted under `/user-api`, `/author-api`, `/admin-api`, and `/common-api`.
